@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>HELLO WEB-SOCKET</h1>
+    <input type="text" id="msg">
+    <input type="button" id="btn" value="button">
+    <div id="content">
+
+    </div>
+    <!--client에서 web-socket 요청을 위해서 필요한 라이브러리
+    npm install socket.io하면서 다운 받아져 있던 내용임-->
+    <script type="text/javascript" src="socket.io.js"></script>
+    <script type="text/javascript">
+        let socket = io('http://localhost:3000');
+        const msg = document.querySelector('#msg');
+        const content = document.querySelector('#content')
+
+        socket.on('connect',()=>{
+            msg.value = 'connection succeed'
+        })
+
+        const btn = document.querySelector('#btn');
+        btn.addEventListener('click',()=>{
+            socket.emit('send',{msg:msg.value});
+            content.innerHTML += `mine ${msg.value} <br/>`
+        });
+
+        socket.on('call',(data)=>{
+            content.innerHTML += `others ${data} <br/>`
+        })
+    </script>
+</body>
+</html>
